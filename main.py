@@ -1,6 +1,8 @@
 import os
 import sys
 import tempfile
+from dotenv import load_dotenv
+load_dotenv()
 
 os.environ["PYTHONIOENCODING"] = "utf-8"
 os.environ["PYTHONLEGACYWINDOWSSTDIO"] = "utf-8"
@@ -27,7 +29,7 @@ st.set_page_config(page_title="RAG 文档问答", page_icon="📚")
 st.title("📚 RAG 文档问答系统")
 st.caption("基于 LangChain + Chroma + DeepSeek 构建")
 
-# ── 加载 Embedding 模型─────────────────────────
+# ── 加载 Embedding 模型（只加载一次）─────────────────────────
 @st.cache_resource
 def load_embedding_model():
     return HuggingFaceEmbeddings(
@@ -37,7 +39,7 @@ def load_embedding_model():
 @st.cache_resource
 def load_client():
     return OpenAI(
-        api_key="DEEPSEEK_API_KEY",
+        api_key=os.getenv("DEEPSEEK_API_KEY"),
         base_url="https://api.deepseek.com/v1"
     )
 
@@ -134,14 +136,12 @@ def ask(question, vectorstore, chat_history):
         sources.append(f"📄 {filename}  第 {page} 页")
     sources = list(dict.fromkeys(sources))
 
-    # 系统 prompt
     system_prompt = f"""你是一个文档助手，请根据以下参考内容回答用户的问题。
 如果内容中没有相关信息，请说"文档中未找到相关内容"。
 
 参考内容：
 {context}
 """
-    # 构建完整对话历史
     messages = [{"role": "system", "content": system_prompt}]
     for msg in chat_history:
         messages.append({"role": msg["role"], "content": msg["content"]})
@@ -179,7 +179,7 @@ else:
                 answer, sources = ask(
                     question,
                     st.session_state.vectorstore,
-                    st.session_state.messages[:-1]  # 传入除最新问题外的历史
+                    st.session_state.messages[:-1]
                 )
             st.write(answer)
             with st.expander("📌 来源"):
