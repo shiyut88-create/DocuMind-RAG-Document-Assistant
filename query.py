@@ -1,4 +1,7 @@
 import os
+from dotenv import load_dotenv
+load_dotenv()
+
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
 from openai import OpenAI
@@ -15,17 +18,15 @@ vectorstore = Chroma(
 
 # ── 2. 连接 DeepSeek API ──────────────────────────────────────
 client = OpenAI(
-    api_key="DeepSeek_API",
+    api_key=os.getenv("DEEPSEEK_API_KEY"),
     base_url="https://api.deepseek.com"
 )
 
 # ── 3. 问答函数 ───────────────────────────────────────────────
 def ask(question):
-    # 从知识库检索最相关的3个块
     results = vectorstore.similarity_search(question, k=3)
     context = "\n\n".join([doc.page_content for doc in results])
 
-    # 拼成 prompt
     prompt = f"""你是一个文档助手，请根据以下内容回答用户的问题。
 如果内容中没有相关信息，请说"文档中未找到相关内容"。
 
