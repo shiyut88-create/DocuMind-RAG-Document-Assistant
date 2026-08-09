@@ -15,7 +15,7 @@ vectorstore = Chroma(
 
 # ── 2. 连接 DeepSeek API ──────────────────────────────────────
 client = OpenAI(
-    api_key="sk-69392588f23b491081d42b6a98f8326f",
+    api_key="DeepSeek_API",
     base_url="https://api.deepseek.com"
 )
 
