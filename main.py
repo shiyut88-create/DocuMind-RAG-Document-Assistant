@@ -1,4 +1,3 @@
-# ========== 【必须放在最顶部】全局编码修复 ==========
 import os
 import sys
 import tempfile
@@ -28,7 +27,7 @@ st.set_page_config(page_title="RAG 文档问答", page_icon="📚")
 st.title("📚 RAG 文档问答系统")
 st.caption("基于 LangChain + Chroma + DeepSeek 构建")
 
-# ── 加载 Embedding 模型（只加载一次）─────────────────────────
+# ── 加载 Embedding 模型─────────────────────────
 @st.cache_resource
 def load_embedding_model():
     return HuggingFaceEmbeddings(
@@ -38,7 +37,7 @@ def load_embedding_model():
 @st.cache_resource
 def load_client():
     return OpenAI(
-        api_key="sk-69392588f23b491081d42b6a98f8326f",
+        api_key="DEEPSEEK_API_KEY",
         base_url="https://api.deepseek.com/v1"
     )
 
