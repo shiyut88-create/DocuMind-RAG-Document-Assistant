@@ -1,4 +1,4 @@
-# RAG 文档问答系统
+# DocuMind — RAG Document Assistant
 
 一个基于 **LangChain、Chroma 和 DeepSeek** 构建的 RAG（检索增强生成）文档问答系统。用户可以上传 PDF、Word 和 TXT 文档，构建知识库，并围绕文档内容进行提问。系统会检索相关文本作为回答依据，同时展示相关来源，方便用户核对。
 
